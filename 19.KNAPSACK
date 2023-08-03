@@ -25,6 +25,7 @@ void main()
     }
 
     for (i = 0; i < no_items; ++i)
+    {
         used[i] = 0;
 
     cur_weight = capacity;
@@ -47,7 +48,7 @@ void main()
             printf("Added %d%% (%d Rs., %dKg) of object %d in the bag.\n", item_percent, value[item], weight[item], item + 1);
             total_profit -= value[item];
             total_profit += (1 + (float)cur_weight / weight[item]) * value[item];
-        }
+        }}
     }
 
     printf("Filled the bag with objects worth %.2f Rs.\n", total_profit);
