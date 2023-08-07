@@ -1,73 +1,66 @@
+
 #include<stdio.h>
- 
-int matrix[25][25], visited_cities[10], limit, cost = 0;
- 
-int tsp(int c)
+
+int ary[10][10],completed[10],n,cost=0;
+void takeInput()
 {
-      int count, nearest_city = 999;
-      int minimum = 999, temp;
-      for(count = 0; count < limit; count++)
-      {
-            if((matrix[c][count] != 0) && (visited_cities[count] == 0))
-            {
-                  if(matrix[c][count] < minimum)
-                  {
-                        minimum = matrix[count][0] + matrix[c][count];
-                  }
-                  temp = matrix[c][count];
-                  nearest_city = count;
-            }
-      }
-      if(minimum != 999)
-      {
-            cost = cost + temp;
-      }
-      return nearest_city;
-}
- 
-void minimum_cost(int city)
+int i,j;
+printf("Enter the number of villages: ");
+scanf("%d",&n);
+printf("\nEnter the Cost Matrix\n");
+for(i=0;i < n;i++)
 {
-      int nearest_city;
-      visited_cities[city] = 1;
-      printf("%d ", city + 1);
-      nearest_city = tsp(city);
-      if(nearest_city == 999)
-      {
-            nearest_city = 0;
-            printf("%d", nearest_city + 1);
-            cost = cost + matrix[city][nearest_city];
-            return;
-      }
-      minimum_cost(nearest_city);
+printf("\nEnter Elements of Row: %d\n",i+1);
+for( j=0;j < n;j++)
+scanf("%d",&ary[i][j]);
+completed[i]=0;
 }
- 
+printf("\n\nThe cost list is:");
+for( i=0;i < n;i++)
+{
+printf("\n");
+for(j=0;j < n;j++)
+printf("\t%d",ary[i][j]);
+}
+}
+void mincost(int city)
+{
+int i,ncity;
+completed[city]=1;
+printf("%d--->",city+1);
+ncity=least(city);
+if(ncity==999)
+{
+ncity=0;
+printf("%d",ncity+1);
+cost+=ary[city][ncity];
+return;
+}
+mincost(ncity);
+}
+int least(int c)
+{
+int i,nc=999;
+int min=999,kmin;
+for(i=0;i < n;i++)
+{
+if((ary[c][i]!=0)&&(completed[i]==0))
+if(ary[c][i]+ary[i][c] < min)
+{
+min=ary[i][0]+ary[c][i];
+kmin=ary[c][i];
+nc=i;
+}
+}
+if(min!=999)
+cost+=kmin;
+return nc;
+}
 int main()
-{ 
-      int i, j;
-      printf("Enter Total Number of Cities:\t");
-      scanf("%d", &limit);
-      printf("\nEnter Cost Matrix\n");
-      for(i = 0; i < limit; i++)
-      {
-            printf("\nEnter %d Elements in Row[%d]\n", limit, i + 1);
-            for(j = 0; j < limit; j++)
-            {
-                  scanf("%d", &matrix[i][j]);
-            }
-            visited_cities[i] = 0;
-      }
-      printf("\nEntered Cost Matrix\n");
-      for(i = 0; i < limit; i++)
-      {
-            printf("\n");
-            for(j = 0; j < limit; j++)
-            {
-                  printf("%d ", matrix[i][j]);
-            }
-      }
-      printf("\n\nPath:\t");
-      minimum_cost(0);
-      printf("\n\nMinimum Cost: \t");
-      printf("%d\n", cost);
-      return 0;
+{
+takeInput();
+printf("\n\nThe Path is:\n");
+mincost(0); //passing 0 because starting vertex
+printf("\n\nMinimum cost is %d\n ",cost);
+return 0;
 }
